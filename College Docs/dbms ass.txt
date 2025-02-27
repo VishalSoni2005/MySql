@@ -1,0 +1,18 @@
+consider the following tables or relational databases for retail industry, following are the schema 
+
+	1-> product table
+
+		product (product_id, product_name, category, price decimal)
+
+	2-> sales (order_id, product_id, quantity, totalamount decimal, order_data date)
+
+
+statements:  find all the products that costs more than rs 200 .
+			find the details of products those are having category as electronics
+			display the info of product that belongs to category electrical and cost is greate than or equal to 3000
+			calculate the total amount of sells for each order by multiplying quantity by price 
+			find the total sells, average sells and the number of sells orders for each product category
+			retrive sells orders made in last 3 months
+			find the top 5 products by total sells in the last quater 
+			find all products that were either sold in the last quater or have a price greater than 4000
+			
