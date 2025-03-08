@@ -3,22 +3,27 @@ import axios from 'axios';
 
 function App() {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [age, setAge] = useState('');
   const [users, setUsers] = useState([]);
 
-  const CheckUser = async () => {
+  const handleSubmit = async e => {
+    e.preventDefault();
+
     try {
-      const response = await axios.get('http://localhost:3000/users');
-      const userArray = response.data;
+      const response = await axios.post('http://localhost:3000/users', {
+        name,
+        email,
+        age: Number(age),
+      });
 
-      const userExists = userArray.some(user => user.name === name);
-
-      if (userExists) {
-        console.log('User found:', name);
-      } else {
-        console.log('User not found');
-      }
+      console.log('User created:', response.data);
+      setName('');
+      setEmail('');
+      setAge('');
+      getAllUsers(); // Refresh user list
     } catch (error) {
-      console.log(error);
+      console.log('Error creating user:', error);
     }
   };
 
@@ -26,7 +31,6 @@ function App() {
     try {
       const response = await axios.get('http://localhost:3000/users');
       setUsers(response.data);
-      setName('');
     } catch (err) {
       console.log(err);
     }
@@ -34,27 +38,50 @@ function App() {
 
   return (
     <div className="h-screen w-screen flex flex-col items-center justify-center transition transform ease-in-out duration-500">
-      <div className="flex flex-col">
+      {/* Form to Add User */}
+      <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <input
           className="border-3 rounded-full font-bold border-pink-500 solid p-3 m-3"
           type="text"
           placeholder="Enter name"
           value={name}
           onChange={e => setName(e.target.value)}
+          required
         />
-        <button onClick={CheckUser} className="bg-pink-500 p-3 m-3 rounded-full w-[150px] translate-x-8">
-          Search User
+        <input
+          className="border-3 rounded-full font-bold border-pink-500 solid p-3 m-3"
+          type="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
+        <input
+          className="border-3 rounded-full font-bold border-pink-500 solid p-3 m-3"
+          type="number"
+          placeholder="Enter age"
+          value={age}
+          onChange={e => setAge(e.target.value)}
+          required
+        />
+        <button type="submit" className="bg-green-500 p-3 m-3 rounded-full w-[150px]">
+          Add User
         </button>
-        <button onClick={getAllUsers} className="bg-pink-500 p-3 m-3 rounded-full w-[150px] translate-x-8">
-          Get all Users
-        </button>
-      </div>
+      </form>
 
+      {/* Button to Get All Users */}
+      <button onClick={getAllUsers} className="bg-blue-500 p-3 m-3 rounded-full w-[150px]">
+        Get all Users
+      </button>
+
+      {/* Display Users */}
       {users.length > 0 && (
-        <div className="h-[100px] overflow-y-scroll w-[200px] border-3 p-3 m-3 rounded-lg">
+        <div className="h-[200px] overflow-y-scroll w-[300px] border-3 p-3 m-3 rounded-lg">
           <ol>
             {users.map(user => (
-              <li key={user.id}>{user.name}</li>
+              <li key={user.id}>
+                {user.name} - {user.email} - {user.age}
+              </li>
             ))}
           </ol>
         </div>
