@@ -20,7 +20,7 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center gap-10 bg-gradient-to-r from-black  to-gray-800 p-6">
+    <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-r from-black  to-gray-800 p-6">
       <AddUserForm refreshUsers={getAllUsers} />
       <UserList users={users} />
     </div>
