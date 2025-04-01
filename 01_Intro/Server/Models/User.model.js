@@ -1,9 +1,15 @@
 const connection = require('../Config/db');
+const bcrypt = require('bcryptjs');
 
-//* fn to create a new user
-const createUser = (name, email, age, callback) => {
-  const sql = `INSERT INTO users (name, email, age) VALUES (?, ?, ?)`;
-  connection.query(sql, [name, email, age], callback);
+const createUser = async (name, email, phone, password, callback) => {
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const sql = `INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)`;
+    connection.query(sql, [name, email, phone, hashedPassword], callback);
+  } catch (error) {
+    callback(error, null);
+    console.log(error);
+  }
 };
 
 const getUsers = callback => {
@@ -16,14 +22,14 @@ const updateUser = (id, name, email, age, callback) => {
   connection.query(sql, [name, email, age, id], callback);
 };
 
-//* delete from the database
-const deleteUser = (id, callback) => {
-  connection.query('DELETE FROM users WHERE id = ?', [id], callback);
-};
+// //* delete from the database
+// const deleteUser = (id, callback) => {
+//   connection.query('DELETE FROM users WHERE id = ?', [id], callback);
+// };
 
 module.exports = {
   createUser,
   getUsers,
-  updateUser,
-  deleteUser,
+  updateUser, 
+  // deleteUser,
 };
